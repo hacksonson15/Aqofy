@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Play Game</title>
+
+
+
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/appwrite@16.0.2"></script>
+</head>
+<body>
+
+<div id="online-panel">
+  <h2>🌐 Online — Live Room</h2>
+  <p>Doston ke saath khelo — ek room banao, code bhejo, sab join karenge.</p>
+  <label>Apna Naam</label><input id="online-name" type="text" placeholder="e.g. Ali" maxlength="20">
+  <div class="row"><div><label>Mode</label><select id="online-mode"><option>4 Players</option><option>1 Vs 1</option><option>2 Vs 2</option></select></div>
+  <div><label>Room Code (Join ke liye)</label><input id="online-code" type="text" placeholder="e.g. AB12CD" maxlength="6"></div></div>
+  <div class="row" style="margin-top:12px"><button id="online-create" type="button">➕ Room Banao</button><button id="online-join" type="button">🔗 Join Room</button></div>
+  <div id="online-room-info" style="display:none;margin-top:14px">
+    <div>Room Code: <span id="online-room-code">—</span></div>
+    <div>Tumhara Color: <b id="online-my-color">—</b> &nbsp;|&nbsp; Host ke Start dabate hi sab ka game khulega.</div>
+    <ul id="online-players"></ul>
+    <div class="row"><button id="online-start" type="button">▶️ Game Start (Host)</button><button id="online-copy" type="button">📋 Code Copy</button><button id="online-leave" type="button">Leave</button></div>
+  </div>
+  <div id="online-log">Offline mode bhi chalta rahega — Live ke liye neeche Appwrite setup poora karo.</div>
+  <p style="font-size:12px;margin-top:8px">Offline khelna hai? Neeche purane lobby se bhi khel sakte ho.</p>
+</div>
+
+<div id="root"></div>
+<div id="game-wrap" style="display:none">
+<div id="emoji-houses">
+  <div class="emoji-house eh-red" data-house="red"><button class="eh-toggle" aria-label="Red emojis">😊</button><div class="eh-label"><span class="eh-dot" style="background:#ED1C24"></span>Red</div><div class="eh-list"><button data-emoji="😊">😊</button><button data-emoji="😂">😂</button><button data-emoji="🤣">🤣</button><button data-emoji="😅">😅</button><button data-emoji="😬">😬</button><button data-emoji="😕">😕</button><button data-emoji="🙄">🙄</button><button data-emoji="🤕">🤕</button><button data-emoji="🥳">🥳</button><button data-emoji="😭">😭</button><button data-emoji="🤗">🤗</button><button data-emoji="☹">☹</button><button data-emoji="😢">😢</button><button data-emoji="😡">😡</button><button data-emoji="😤">😤</button><button data-emoji="👻">👻</button><button data-emoji="🙏">🙏</button><button data-emoji="🤝">🤝</button><button data-emoji="🐍">🐍</button><button data-emoji="🐢">🐢</button><button data-emoji="🔪">🔪</button><button data-emoji="😋">😋</button><button data-emoji="🤪">🤪</button><button data-emoji="😐">😐</button><button data-emoji="🤔">🤔</button><button data-emoji="😒">😒</button><button data-emoji="🤨">🤨</button><button data-emoji="😱">😱</button></div></div>
+  <div class="emoji-house eh-blue" data-house="blue"><button class="eh-toggle" aria-label="Blue emojis">😊</button><div class="eh-label"><span class="eh-dot" style="background:#2196F3"></span>Blue</div><div class="eh-list"><button data-emoji="😊">😊</button><button data-emoji="😂">😂</button><button data-emoji="🤣">🤣</button><button data-emoji="😅">😅</button><button data-emoji="😬">😬</button><button data-emoji="😕">😕</button><button data-emoji="🙄">🙄</button><button data-emoji="🤕">🤕</button><button data-emoji="🥳">🥳</button><button data-emoji="😭">😭</button><button data-emoji="🤗">🤗</button><button data-emoji="☹">☹</button><button data-emoji="😢">😢</button><button data-emoji="😡">😡</button><button data-emoji="😤">😤</button><button data-emoji="👻">👻</button><button data-emoji="🙏">🙏</button><button data-emoji="🤝">🤝</button><button data-emoji="🐍">🐍</button><button data-emoji="🐢">🐢</button><button data-emoji="🔪">🔪</button><button data-emoji="😋">😋</button><button data-emoji="🤪">🤪</button><button data-emoji="😐">😐</button><button data-emoji="🤔">🤔</button><button data-emoji="😒">😒</button><button data-emoji="🤨">🤨</button><button data-emoji="😱">😱</button></div></div>
+  <div class="emoji-house eh-green" data-house="green"><button class="eh-toggle" aria-label="Green emojis">😊</button><div class="eh-label"><span class="eh-dot" style="background:#4CAF50"></span>Green</div><div class="eh-list"><button data-emoji="😊">😊</button><button data-emoji="😂">😂</button><button data-emoji="🤣">🤣</button><button data-emoji="😅">😅</button><button data-emoji="😬">😬</button><button data-emoji="😕">😕</button><button data-emoji="🙄">🙄</button><button data-emoji="🤕">🤕</button><button data-emoji="🥳">🥳</button><button data-emoji="😭">😭</button><button data-emoji="🤗">🤗</button><button data-emoji="☹">☹</button><button data-emoji="😢">😢</button><button data-emoji="😡">😡</button><button data-emoji="😤">😤</button><button data-emoji="👻">👻</button><button data-emoji="🙏">🙏</button><button data-emoji="🤝">🤝</button><button data-emoji="🐍">🐍</button><button data-emoji="🐢">🐢</button><button data-emoji="🔪">🔪</button><button data-emoji="😋">😋</button><button data-emoji="🤪">🤪</button><button data-emoji="😐">😐</button><button data-emoji="🤔">🤔</button><button data-emoji="😒">😒</button><button data-emoji="🤨">🤨</button><button data-emoji="😱">😱</button></div></div>
+  <div class="emoji-house eh-orange" data-house="orange"><button class="eh-toggle" aria-label="Orange emojis">😊</button><div class="eh-label"><span class="eh-dot" style="background:#FF9800"></span>Orange</div><div class="eh-list"><button data-emoji="😊">😊</button><button data-emoji="😂">😂</button><button data-emoji="🤣">🤣</button><button data-emoji="😅">😅</button><button data-emoji="😬">😬</button><button data-emoji="😕">😕</button><button data-emoji="🙄">🙄</button><button data-emoji="🤕">🤕</button><button data-emoji="🥳">🥳</button><button data-emoji="😭">😭</button><button data-emoji="🤗">🤗</button><button data-emoji="☹">☹</button><button data-emoji="😢">😢</button><button data-emoji="😡">😡</button><button data-emoji="😤">😤</button><button data-emoji="👻">👻</button><button data-emoji="🙏">🙏</button><button data-emoji="🤝">🤝</button><button data-emoji="🐍">🐍</button><button data-emoji="🐢">🐢</button><button data-emoji="🔪">🔪</button><button data-emoji="😋">😋</button><button data-emoji="🤪">🤪</button><button data-emoji="😐">😐</button><button data-emoji="🤔">🤔</button><button data-emoji="😒">😒</button><button data-emoji="🤨">🤨</button><button data-emoji="😱">😱</button></div></div>
+</div>
+
+<div id="game-topbar"><button id="back-to-lobby">Back</button><span id="game-mode-label">Play Game</span></div>
+<div id="game-root"></div>
+<div id="game-chat">
+  <div class="chat-houses"><span>Apna House:</span>
+    <button type="button" class="chat-house active" data-chat-house="red" style="background:#ED1C24" aria-label="Red house"></button>
+    <button type="button" class="chat-house" data-chat-house="blue" style="background:#2196F3" aria-label="Blue house"></button>
+    <button type="button" class="chat-house" data-chat-house="green" style="background:#4CAF50" aria-label="Green house"></button>
+    <button type="button" class="chat-house" data-chat-house="orange" style="background:#FF9800" aria-label="Orange house"></button>
+  </div>
+  <div class="chat-row">
+    <input id="chat-input" type="text" maxlength="30" placeholder="Chhota message likho..." autocomplete="off">
+    <span id="chat-count">0/30</span>
+    <button type="button" id="chat-send">Send</button>
+  </div>
+</div>
+</div>
+<div id="team-select" style="display:none">
+<div class="team-card">
+<h3>Select Your Team</h3>
+<p class="team-sub">Ek team select karo, dobara dabao to unselect ho jayegi.</p>
+<button type="button" id="team-btn-a" class="team-btn">Team A <span>Red + Orange</span></button>
+<button type="button" id="team-btn-b" class="team-btn">Team B <span>Blue + Green</span></button>
+<button type="button" id="team-start-btn" class="team-start" disabled>Start</button>
+<button type="button" class="team-cancel">Cancel</button>
+</div>
+</div>
+
+
+
+
+
+<!-- Music / sounds removed: game is fully silent -->
+
+
+
+
+
+
+  <script src="appwrite-config.js"></script>
+  <script src="appwrite-database.js"></script>
+  <script src="appwrite-live.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
